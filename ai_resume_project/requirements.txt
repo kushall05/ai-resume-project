@@ -3,3 +3,4 @@ scikit-learn
 gunicorn
 PyPDF2
 python-docx
+pdfplumber
