@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
-from resume_parser import extract_text
-from analyzer import analyze_resume
+from ai_resume_project.resume_parser import extract_text
+from ai_resume_project.analyzer import analyze_resume
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
