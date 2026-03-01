@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Results — CareerAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="results-page">
+
+    <div class="results-card">
+
+        <h1>AI Career Analysis</h1>
+
+        {% for profession, score in result.top_professions %}
+        <div class="progress-item">
+            <div class="progress-header">
+                <span>{{ profession }}</span>
+                <span>{{ score }}%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" data-score="{{ score }}"></div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <h3>Experience Level: {{ result.experience }}</h3>
+
+        <canvas id="chart"></canvas>
+
+        <a href="/" class="btn-premium back-btn">Analyze Another Resume</a>
+
+    </div>
+
+</div>
+
+{% if result %}
+<script type="application/json" id="chart-data">
+{
+    "labels": {{ result.skill_count.keys() | list | tojson }},
+    "values": {{ result.skill_count.values() | list | tojson }}
+}
+</script>
+{% endif %}
+
+<script>
+document.querySelectorAll(".progress-fill").forEach(bar=>{
+    bar.style.width = bar.getAttribute("data-score") + "%";
+});
+
+const dataElement = document.getElementById("chart-data");
+if(dataElement){
+    const parsed = JSON.parse(dataElement.textContent);
+
+    new Chart(document.getElementById("chart"), {
+        type:"doughnut",
+        data:{
+            labels:parsed.labels,
+            datasets:[{
+                data:parsed.values,
+                backgroundColor:["#000000","#222","#444","#666","#888"]
+            }]
+        }
+    });
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number:{value:60},
+    color:{value:"#c4b5fd"},
+    size:{value:3},
+    line_linked:{enable:true,color:"#a5f3fc"}
+  }
+});
+</script>
+
+</body>
+</html>
